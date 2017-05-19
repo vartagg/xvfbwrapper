@@ -29,6 +29,7 @@ class Xvfb(object):
     SLEEP_TIME_BEFORE_START = 0.1
 
     def __init__(self, width=800, height=680, colordepth=24, tempdir=None,
+                 use_display=None,
                  **kwargs):
         self.width = width
         self.height = height
@@ -51,6 +52,7 @@ class Xvfb(object):
             self.orig_display = None
 
         self.proc = None
+        self.use_display = use_display
 
     def __enter__(self):
         self.start()
@@ -125,7 +127,10 @@ class Xvfb(object):
         '''
         tempfile_path = os.path.join(self._tempdir, '.X{0}-lock')
         while True:
-            rand = randint(1, self.__class__.MAX_DISPLAY)
+            if self.use_display:
+                rand = self.use_display
+            else:
+                rand = randint(1, self.__class__.MAX_DISPLAY)
             self._lock_display_file = open(tempfile_path.format(rand), 'w')
             try:
                 fcntl.flock(self._lock_display_file,
