@@ -113,11 +113,12 @@ class Xvfb(object):
         to ensure lock files are purged.
 
         '''
-        self._lock_display_file.close()
-        try:
-            os.remove(self._lock_display_file.name)
-        except OSError:
-            pass
+        if self._lock_display_file:
+            self._lock_display_file.close()
+            try:
+                os.remove(self._lock_display_file.name)
+            except OSError:
+                pass
 
     def _get_next_unused_display(self):
         '''
