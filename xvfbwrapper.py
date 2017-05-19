@@ -113,7 +113,7 @@ class Xvfb(object):
         to ensure lock files are purged.
 
         '''
-        if self._lock_display_file:
+        if hasattr(self, '_lock_display_file'):
             self._lock_display_file.close()
             try:
                 os.remove(self._lock_display_file.name)
